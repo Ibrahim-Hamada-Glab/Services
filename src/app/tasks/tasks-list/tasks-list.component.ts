@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { TaskItemComponent } from './task-item/task-item.component';
+import { TasksService } from '../../Services/tasks.service';
 
 @Component({
   selector: 'app-tasks-list',
@@ -8,12 +9,15 @@ import { TaskItemComponent } from './task-item/task-item.component';
   templateUrl: './tasks-list.component.html',
   styleUrl: './tasks-list.component.css',
   imports: [TaskItemComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TasksListComponent {
-  selectedFilter = signal<string>('all');
-  tasks = [];
-
+  private readonly tasksService = inject(TasksService);
+  selectedFilter = this.tasksService.selectedFilter;
+  tasks = this.tasksService.filteredTasks;
   onChangeTasksFilter(filter: string) {
-    this.selectedFilter.set(filter);
+    this.tasksService.SetSelectedFilter(filter.toUpperCase());
+
+    console.log(this.tasks());
   }
 }

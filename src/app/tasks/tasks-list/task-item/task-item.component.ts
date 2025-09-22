@@ -1,7 +1,14 @@
-import { Component, computed, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  inject,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Task, TaskStatus } from '../../task.model';
+import { TasksService } from '../../../Services/tasks.service';
 
 @Component({
   selector: 'app-task-item',
@@ -9,8 +16,10 @@ import { Task, TaskStatus } from '../../task.model';
   imports: [FormsModule],
   templateUrl: './task-item.component.html',
   styleUrl: './task-item.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskItemComponent {
+  private readonly tasksService = inject(TasksService);
   task = input.required<Task>();
   taskStatus = computed(() => {
     switch (this.task().status) {
@@ -27,19 +36,8 @@ export class TaskItemComponent {
 
   onChangeTaskStatus(taskId: string, status: string) {
     let newStatus: TaskStatus = 'OPEN';
+    newStatus = status.toUpperCase() as TaskStatus;
 
-    switch (status) {
-      case 'open':
-        newStatus = 'OPEN';
-        break;
-      case 'in-progress':
-        newStatus = 'IN_PROGRESS';
-        break;
-      case 'done':
-        newStatus = 'DONE';
-        break;
-      default:
-        break;
-    }
+    this.tasksService.UpdateTaskStatus(taskId, newStatus);
   }
 }

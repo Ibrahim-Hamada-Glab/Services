@@ -6,3 +6,8 @@ export interface Task {
   description: string;
   status: TaskStatus;
 }
+
+export interface AddTaskDto {
+  title: string;
+  description: string;
+}

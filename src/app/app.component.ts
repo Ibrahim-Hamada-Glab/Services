@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { TasksComponent } from './tasks/tasks.component';
 
@@ -7,5 +7,6 @@ import { TasksComponent } from './tasks/tasks.component';
   standalone: true,
   templateUrl: './app.component.html',
   imports: [TasksComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {}
